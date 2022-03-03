@@ -2,7 +2,7 @@
 
 namespace Database\Factories;
 
-use App\Post;
+use App\Models\Post;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class PostFactory extends Factory
@@ -13,7 +13,7 @@ class PostFactory extends Factory
     {
     	return [
     	    'title' => $this->faker->title,
-            'body' => $this->faker->body,
+            'body' => $this->faker->text,
     	];
     }
 }

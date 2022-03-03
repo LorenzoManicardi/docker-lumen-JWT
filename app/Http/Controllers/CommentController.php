@@ -7,6 +7,12 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
+    /**
+     * @param Request $request
+     * @param string $post_id
+     * @return array|string[]
+     * @throws \Illuminate\Validation\ValidationException
+     */
     public function store(Request $request, string $post_id)
     {
         $this->validate($request, [
@@ -23,7 +29,15 @@ class CommentController extends Controller
             return ["status" => "error", "message" => $e];
         }
     }
-    public function update(Request $request,string $post_id,string $id)
+
+    /**
+     * @param Request $request
+     * @param string $post_id
+     * @param string $id
+     * @return array|string[]
+     * @throws \Illuminate\Validation\ValidationException
+     */
+    public function update(Request $request, string $post_id, string $id)
     {
         if (auth()->user()->subscription == 'premium') {
             $this->validate($request, [
@@ -43,6 +57,11 @@ class CommentController extends Controller
 
     }
 
+    /**
+     * @param string $post_id
+     * @param string $id
+     * @return array|string[]
+     */
     public function destroy(string $post_id, string $id)
     {
         if (auth()->user()->subscription == 'premium') {
