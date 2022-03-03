@@ -55,10 +55,10 @@ class PostController extends Controller
         return $p;
     }
 
-    public function destroy($id)
+    public function destroy(string $id)
     {
 
-        $p = auth()->user()->posts->where('id', $id)->find($id);
+        $p = auth()->user()->posts()->findOrFail($id);
             if ($p->comments) {
                 foreach ($p->comments as $comment ) {
                     $comment->delete();
