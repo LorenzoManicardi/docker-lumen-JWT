@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use DB;
 
 class QueryMiddleware
 {
@@ -15,7 +16,16 @@ class QueryMiddleware
      */
     public function handle($request, Closure $next)
     {
-        echo "before passing the request";
-        return $next($request);
+        //can activate middleware before passing the request
+        //echo "before passing the request!", "<br>";
+        //return $next($request);
+
+        // or maybe
+        DB::connection()->enableQueryLog();
+        $response =  $next($request);
+        $myLog = DB::getQueryLog();
+        $obj = Array("log" => $myLog, "response" => $response);
+        return $obj;
+
     }
 }
