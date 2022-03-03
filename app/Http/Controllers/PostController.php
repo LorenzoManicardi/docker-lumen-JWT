@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-
+use DB;
 use App\Models\Post;
 use Illuminate\Http\Request;
 
@@ -54,11 +54,15 @@ class PostController extends Controller
      */
     public function update(Request $request, string $id)
     {
+        //enabling the QueryLogger
+        //DB::connection()->enableQueryLog();
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
         ]);
         $p = auth()->user()->posts()->findOrFail($id);
+        //die-dumping the QueryLogger results, will move this into new middleware
+        //dd(DB::getQueryLog());
         $p->title = $request->input('title');
         $p->content = $request->input('content');
         $p->save();
