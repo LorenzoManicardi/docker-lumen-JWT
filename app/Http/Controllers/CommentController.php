@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CommentController extends Controller
 {
-    public function store(Request $request, $post_id)
+    public function store(Request $request, string $post_id)
     {
         $this->validate($request, [
             "content" => 'string|required'
@@ -23,14 +23,14 @@ class CommentController extends Controller
             return ["status" => "error", "message" => $e];
         }
     }
-    public function update(Request $request, $post_id, $id)
+    public function update(Request $request,string $post_id,string $id)
     {
         if (auth()->user()->subscription == 'premium') {
             $this->validate($request, [
                 "content" => 'string|required'
             ]);
             try {
-                $n = auth()->user()->comments->where('post_id', $post_id)->where('id', $id)->first();
+                $n = auth()->user()->comments()->where('post_id', $post_id)->findOrFail($id);
                 $n->content = $request->content;
                 $n->save();
                 return ["status" => "success", "message" => "comment updated successfully!"];
@@ -43,11 +43,11 @@ class CommentController extends Controller
 
     }
 
-    public function destroy($post_id, $id)
+    public function destroy(string $post_id, string $id)
     {
         if (auth()->user()->subscription == 'premium') {
             try {
-                $n = auth()->user()->comments->where('post_id', $post_id)->where('id', $id)->first();
+                $n = auth()->user()->comments()->where('post_id', $post_id)->findOrFail($id);
                 $n->delete();
                 return ["status" => "success", "message" => "comment deleted successfully!"];
             } catch(\Error $e) {
