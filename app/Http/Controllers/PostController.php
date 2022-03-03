@@ -16,7 +16,7 @@ class PostController extends Controller
     }
 
     /**
-     * prende in input
+     * takes input a string "id" -> returns posts with eager loading of his user and comments
      * @param string $id
      * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
      */
@@ -32,7 +32,7 @@ class PostController extends Controller
             'content' => 'required',
         ]);
         $n = new Post([
-            "user_id" => Auth::user()->id,
+            "user_id" => auth()->user()->id,
             "title" => $request->title,
             "content" => $request->content
         ]);
@@ -40,14 +40,14 @@ class PostController extends Controller
         return $n;
     }
 
-    public function update(Request $request, $id)
+    public function update(Request $request, string $id)
     {
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
         ]);
 
-        $p = auth()->user()->posts()->where('id', $id)->findOrFail($id);
+        $p = auth()->user()->posts()->findOrFail($id);
 
         $p->title = $request->input('title');
         $p->content = $request->input('content');
@@ -69,6 +69,6 @@ class PostController extends Controller
                 return ["status" => "success", "message" => "deleted successfully!"];
             } catch (\Error $e) {
                 return ["status" => "error", "message" => $e];
-            };
+            }
     }
 }
