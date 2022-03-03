@@ -20,7 +20,7 @@ $router->group(['prefix' => '/api/v1'], function( $router ) {
 );
 
 //POSTS
-$router->group(['prefix' => '/api/v1/posts'], function( $router ) {
+    $router->group(['prefix' => '/api/v1/posts', 'middleware' => 'query'], function( $router ) {
     $router->get( '/', 'PostController@index' );
     $router->get( '/{id}', 'PostController@show' );
 });
