@@ -39,14 +39,14 @@ $router->group(['prefix' => '/api/v1', 'middleware' => 'auth'], function( $route
 });
 
 //POSTS
-$router->group(['prefix' => '/api/v1/posts', 'middleware' => 'auth'], function( $router ) {
+$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'query']], function( $router ) {
     $router->post( '/', 'PostController@store' );
     $router->put( '/{id}', 'PostController@update' );
     $router->delete( '/{id}', 'PostController@destroy' );
 });
 
 //COMMENTS
-$router->group(['prefix' => '/api/v1/posts', 'middleware' => 'auth'], function( $router ) {
+$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'query']], function( $router ) {
     $router->post( '/{post_id}/comments', 'CommentController@store' );
     $router->put( '/{post_id}/comments/{id}', 'CommentController@update' );
     $router->delete( '{post_id}/comments/{id}', 'CommentController@destroy' );
