@@ -3,13 +3,13 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Error;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class PostController extends Controller
 {
@@ -32,6 +32,7 @@ class PostController extends Controller
     }
 
     /**
+     * takes input a request, creates and returns a Post object
      * @param Request $request
      * @return Post
      * @throws ValidationException
@@ -53,6 +54,7 @@ class PostController extends Controller
     }
 
     /**
+     * takes input a request and an id, updates the Post if existing and returns it
      * @param Request $request
      * @param string $id
      * @return mixed
@@ -72,6 +74,7 @@ class PostController extends Controller
     }
 
     /**
+     * takes input an id, deletes the relative Post
      * @param string $id
      * @return array|string[]
      */
@@ -83,7 +86,7 @@ class PostController extends Controller
         try {
             $p->delete();
             return ["status" => "success", "message" => "deleted successfully!"];
-        } catch (Error $e) {
+        } catch (Throwable $e) {
             return ["status" => "error", "message" => $e];
         }
     }

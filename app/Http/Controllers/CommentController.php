@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
+use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -15,22 +16,25 @@ class CommentController extends Controller
      * @param string $post_id
      * @return array|string[]
      * @throws ValidationException
-     *
      */
     public function store(Request $request, string $post_id)
     {
         $this->validate($request, [
             "content" => 'string|required'
         ]);
-        try {
-            $n = new Comment();
-            $n->user_id = Auth::user()->id;
-            $n->post_id = $post_id;
-            $n->content = $request->input('content');
-            $n->save();
-            return ["status" => "success", "message" => "comment created successfully!"];
-        } catch(Throwable $e) {
-            return ["status" => "error", "message" => $e];
+        /** @var Post $post */
+        $post = Post::findOrFail($post_id);
+        if ($post) {
+            try {
+                $n = new Comment();
+                $n->user_id = Auth::user()->id;
+                $n->post_id = $post->id;
+                $n->content = $request->input('content');
+                $n->save();
+                return ["status" => "success", "message" => "comment created successfully!"];
+            } catch(Throwable $e) {
+                return ["status" => "error", "message" => $e];
+            }
         }
     }
 
@@ -47,7 +51,7 @@ class CommentController extends Controller
             $this->validate($request, [
                 "content" => 'string|required'
             ]);
-            $n = auth()->user()->comments()->where('post_id', $post_id)->findOrFail($id);
+            $n = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
             try {
                 $n->content = $request->input('content');
                 $n->save();
@@ -70,10 +74,10 @@ class CommentController extends Controller
     {
         if (Auth::user()->subscription == 'premium') {
             try {
-                $n = auth()->user()->comments()->where('post_id', $post_id)->findOrFail($id);
+                $n = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
                 $n->delete();
                 return ["status" => "success", "message" => "comment deleted successfully!"];
-            } catch(\Error $e) {
+            } catch(Throwable $e) {
                 return ["status" => "error", "message" => $e];
             }
         } else {
