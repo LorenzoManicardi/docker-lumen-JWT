@@ -45,10 +45,10 @@ class PostController extends Controller
         ]);
         /** @var Post $n */
         $n = new Post([
-            "user_id" => Auth::user()->id,
             "title" => $request->input('title'),
             "content" => $request->input('content')
         ]);
+        $n->setUserId(Auth::user()->id);
         $n->save();
         return $n;
     }
