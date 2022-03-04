@@ -24,7 +24,7 @@ class QueryMiddleware
         DB::connection()->enableQueryLog();
         $response =  $next($request);
         $myLog = DB::getQueryLog();
-        $obj = Array("log" => $myLog, "response" => $response);
+        $obj = Array("queryLog" => $myLog, "response" => $response->original);
         return $obj;
 
     }
