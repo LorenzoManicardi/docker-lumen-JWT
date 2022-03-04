@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 /**
  * @property string title
- *
+ * @property string content
  */
 class Post extends Model
 {
