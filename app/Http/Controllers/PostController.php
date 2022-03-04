@@ -2,14 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use DB;
 use App\Models\Post;
+use Error;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
     /**
-     * @return \Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection
+     * @return Builder[]|Collection
      */
     public function index()
     {
@@ -19,7 +24,7 @@ class PostController extends Controller
     /**
      * takes input a string "id" -> returns posts with eager loading of his user and comments
      * @param string $id
-     * @return \Illuminate\Database\Eloquent\Builder|\Illuminate\Database\Eloquent\Builder[]|\Illuminate\Database\Eloquent\Collection|\Illuminate\Database\Eloquent\Model|null
+     * @return Builder|Builder[]|Collection|Model|null
      */
     public function show(string $id)
     {
@@ -29,7 +34,7 @@ class PostController extends Controller
     /**
      * @param Request $request
      * @return Post
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function store(Request $request)
     {
@@ -37,10 +42,11 @@ class PostController extends Controller
             'title' => 'required',
             'content' => 'required',
         ]);
+        /** @var Post $n */
         $n = new Post([
-            "user_id" => auth()->user()->id,
-            "title" => $request->title,
-            "content" => $request->content
+            "user_id" => Auth::user()->id,
+            "title" => $request->input('title'),
+            "content" => $request->input('content')
         ]);
         $n->save();
         return $n;
@@ -50,19 +56,15 @@ class PostController extends Controller
      * @param Request $request
      * @param string $id
      * @return mixed
-     * @throws \Illuminate\Validation\ValidationException
+     * @throws ValidationException
      */
     public function update(Request $request, string $id)
     {
-        //enabling the QueryLogger
-        //DB::connection()->enableQueryLog();
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
         ]);
         $p = auth()->user()->posts()->findOrFail($id);
-        //die-dumping the QueryLogger results, will move this into new middleware
-        //dd(DB::getQueryLog());
         $p->title = $request->input('title');
         $p->content = $request->input('content');
         $p->save();
@@ -75,17 +77,14 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
+        /** @var Post $p */
         $p = auth()->user()->posts()->findOrFail($id);
-            if ($p->comments) {
-                foreach ($p->comments as $comment ) {
-                    $comment->delete();
-                }
-            }
-            try {
-                $p->delete();
-                return ["status" => "success", "message" => "deleted successfully!"];
-            } catch (\Error $e) {
-                return ["status" => "error", "message" => $e];
-            }
+        $p->comments()->delete();
+        try {
+            $p->delete();
+            return ["status" => "success", "message" => "deleted successfully!"];
+        } catch (Error $e) {
+            return ["status" => "error", "message" => $e];
+        }
     }
 }
