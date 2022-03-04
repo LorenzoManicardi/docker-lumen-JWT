@@ -35,6 +35,8 @@ class CommentController extends Controller
             } catch(Throwable $e) {
                 return ["status" => "error", "message" => $e];
             }
+        } else {
+            return ["status" => "error", "message" => "post not found!"];
         }
     }
 
