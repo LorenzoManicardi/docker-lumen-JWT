@@ -7,12 +7,17 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Auth\Authorizable;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
 /**
  * @property int id
  * @property string subscription
+ * @property string name
+ * @property string email
+ * @property string picture
  */
 class User extends Model implements AuthenticatableContract, AuthorizableContract, JWTSubject
 {
@@ -25,7 +30,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     */
     public function getJWTIdentifier()
     {
-    return $this->getKey();
+        return $this->getKey();
     }
     /**
      * Return a key value array, containing any custom claims to be added to the JWT.
@@ -55,13 +60,28 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         'password',
     ];
 
+    /**
+     * @return HasMany
+     */
     public function posts()
     {
         return $this->hasMany(Post::class);
     }
 
+    /**
+     * @return HasMany
+     */
     public function comments()
     {
         return $this->hasMany(Comment::class);
+    }
+
+    /**
+     * @param $value
+     * @return void
+     */
+    public function hashPassword($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
     }
 }

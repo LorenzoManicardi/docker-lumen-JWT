@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string title
@@ -11,12 +13,18 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Post extends Model
 {
-    public function user()
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function comments()
+    /**
+     * @return HasMany
+     */
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
@@ -27,7 +35,7 @@ class Post extends Model
      * @param $value
      * @return void
      */
-    public function setUserId($value)
+    public function setUserId($value): Attribute
     {
         $this->attributes['user_id'] = $value;
     }

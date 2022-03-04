@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Validation\ValidationException;
 
 
 class AuthController extends Controller
@@ -12,12 +15,14 @@ class AuthController extends Controller
   public function __construct() {
     $this->middleware('auth', ['except' => ['login', 'register',     ]]);
   }
-  /**
-   * Attempt to register a new user to the API.
-   *
-   * @param Request $request
-   * @return Response
-   */
+
+    /**
+     * Attempt to register a new user to the API.
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
   public function register(Request $request)
   {
     // Are the proper fields present?
@@ -31,21 +36,23 @@ class AuthController extends Controller
       $user->name = $request->input('name');
       $user->email = $request->input('email');
       $plainPassword = $request->input('password');
-      $user->password = app('hash')->make($plainPassword);
+      $user->hashPassword($plainPassword);
       $user->save();
       return response()->json(['user' => $user, 'message' => 'CREATED'], 201);
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       return response()->json(['message' => 'User Registration Failed!' , 'error' => $e], 409);
   }
 }
-  /**
-   * Attempt to authenticate the user and retrieve a JWT.
-   * Note: The API is stateless. This method _only_ returns a JWT. There is not an
-   * indicator that a user is logged in otherwise (no sessions).
-   *
-   * @param Request $request
-   * @return Response
-   */
+
+    /**
+     * Attempt to authenticate the user and retrieve a JWT.
+     * Note: The API is stateless. This method _only_ returns a JWT. There is not an
+     * indicator that a user is logged in otherwise (no sessions).
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws ValidationException
+     */
   public function login(Request $request)
   {
     // Are the proper fields present
@@ -64,7 +71,7 @@ class AuthController extends Controller
    * Log the user out (Invalidate the token). Requires a login to use as the
    * JWT in the Authorization header is what is invalidated
    *
-   * @return \Illuminate\Http\JsonResponse
+   * @return JsonResponse
    */
   public function logout() {
     auth()->logout();
@@ -73,7 +80,7 @@ class AuthController extends Controller
   /**
    * Refresh the current token.
    *
-   * @return \Illuminate\Http\JsonResponse
+   * @return JsonResponse
    */
   public function refresh() {
     return $this->respondWithToken( auth()->refresh() );
@@ -81,7 +88,7 @@ class AuthController extends Controller
   /**
    * Helper function to format the response with the token.
    *
-   * @return \Illuminate\Http\JsonResponse
+   * @return JsonResponse
    */
   private function respondWithToken($token)
   {
