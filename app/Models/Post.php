@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -29,15 +28,15 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-    protected $fillable = ['title', 'content'];
 
     /**
      * @param $value
      * @return void
      */
-    public function setUserId($value): Attribute
+    public function setUserId($value)
     {
         $this->attributes['user_id'] = $value;
     }
 
+    protected $fillable = ['title', 'content'];
 }
