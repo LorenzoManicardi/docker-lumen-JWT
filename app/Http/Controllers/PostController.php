@@ -56,10 +56,10 @@ class PostController extends Controller
      * takes input a request and an id, updates the Post if existing and returns it
      * @param Request $request
      * @param string $id
-     * @return mixed
+     * @return Post
      * @throws ValidationException
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $id): Post
     {
         $this->validate($request, [
             'title' => 'required',
@@ -74,6 +74,7 @@ class PostController extends Controller
 
 
     /**
+     * per Steve: qua meglio che la funzione ritorni qualche altro tipo di dato o ha senso così?
      * @param string $id
      * @return array|string[]
      */

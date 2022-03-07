@@ -13,7 +13,7 @@ $router->get('/', function () use ($router) {
  */
 
 //JWT
-$router->group(['prefix' => '/api/v1', 'middleware' => 'wrapper'], function( $router ) {
+$router->group(['prefix' => '/api/v1'], function( $router ) {
         $router->post( '/authenticate', 'AuthController@login');
         $router->post( '/register', 'AuthController@register' );
     }
