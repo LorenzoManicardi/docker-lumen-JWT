@@ -18,7 +18,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::with(['user', 'comments.user:id,name,picture'])->get();
+        return Post::with(['user', 'comments.user:id,name,picture,email'])
+            ->orderBy('id', 'desc')->get();
     }
 
     /**
@@ -28,7 +29,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        return Post::with('user', 'comments.user:id,name,picture')->findOrFail($id);
+        return Post::with('user', 'comments.user:id,name,picture,email')->findOrFail($id);
     }
 
     /**
@@ -93,6 +94,7 @@ class PostController extends Controller
 
     public function userPosts()
     {
-        return auth()->user()->posts()->with('comments.user:id,name,picture,email')->get();
+        return auth()->user()->posts()->with('comments.user:id,name,picture,email')
+            ->orderBy('id', 'desc')->get();
     }
 }
