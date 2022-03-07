@@ -37,20 +37,19 @@ class PostController extends Controller
      * @return Post
      * @throws ValidationException
      */
-    public function store(Request $request)
+    public function store(Request $request): Post
     {
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
         ]);
-        /** @var Post $n */
-        $n = new Post([
+        $newPost = new Post([
             "title" => $request->input('title'),
             "content" => $request->input('content')
         ]);
-        $n->setUserId(Auth::user()->id);
-        $n->save();
-        return $n;
+        $newPost->setUserId(Auth::user()->id);
+        $newPost->save();
+        return $newPost;
     }
 
     /**
@@ -66,19 +65,19 @@ class PostController extends Controller
             'title' => 'required',
             'content' => 'required',
         ]);
-        $p = auth()->user()->posts()->findOrFail($id);
-        $p->title = $request->input('title');
-        $p->content = $request->input('content');
-        $p->save();
-        return $p;
+        $post = auth()->user()->posts()->findOrFail($id);
+        $post->title = $request->input('title');
+        $post->content = $request->input('content');
+        $post->save();
+        return $post;
     }
 
+
     /**
-     * takes input an id, deletes the relative Post
      * @param string $id
      * @return array|string[]
      */
-    public function destroy(string $id)
+    public function destroy(string $id): array
     {
         /** @var Post $p */
         $p = auth()->user()->posts()->findOrFail($id);

@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 /**
  * @property string title
  * @property string content
+ * @method static findOrFail(string $post_id)
  */
 class Post extends Model
 {

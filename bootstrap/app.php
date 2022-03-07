@@ -84,6 +84,10 @@ $app->routeMiddleware([
     'query' => App\Http\Middleware\QueryMiddleware::class,
 ]);
 
+$app->routeMiddleware([
+    'wrapper' => App\Http\Middleware\WrapperMiddleware::class,
+]);
+
 /*
 |--------------------------------------------------------------------------
 | Register Service Providers

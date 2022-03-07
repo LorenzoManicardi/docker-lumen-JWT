@@ -17,7 +17,7 @@ class CommentController extends Controller
      * @return array|string[]
      * @throws ValidationException
      */
-    public function store(Request $request, string $post_id)
+    public function store(Request $request, string $post_id): array
     {
         $this->validate($request, [
             "content" => 'string|required'
@@ -47,7 +47,7 @@ class CommentController extends Controller
      * @return array|string[]
      * @throws ValidationException
      */
-    public function update(Request $request, string $post_id, string $id)
+    public function update(Request $request, string $post_id, string $id): array
     {
         if (Auth::user()->subscription == 'premium') {
             $this->validate($request, [
@@ -72,7 +72,7 @@ class CommentController extends Controller
      * @param string $id
      * @return array|string[]
      */
-    public function destroy(string $post_id, string $id)
+    public function destroy(string $post_id, string $id): array
     {
         if (Auth::user()->subscription == 'premium') {
             try {
