@@ -3,7 +3,7 @@
 /** @var \Laravel\Lumen\Routing\Router $router */
 
 $router->get('/', function () use ($router) {
-    return $router->app->version();
+    return $router->app->version() . "<br>" . "Created by LM ®";
 });
 
 /*
@@ -13,7 +13,7 @@ $router->get('/', function () use ($router) {
  */
 
 //JWT
-$router->group(['prefix' => '/api/v1', 'middleware' => ['auth', 'wrapper']], function( $router ) {
+$router->group(['prefix' => '/api/v1', 'middleware' => ['auth']], function( $router ) {
     $router->post( '/logout', 'AuthController@logout' );
     $router->get( '/refresh', 'AuthController@refresh' );
     $router->post( '/refresh', 'AuthController@refresh' );

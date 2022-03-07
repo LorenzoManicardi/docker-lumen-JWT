@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::with(['user', 'comments'])->get();
+        return Post::with(['user', 'comments.user'])->get();
     }
 
     /**
@@ -28,7 +28,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        return Post::with('user', 'comments')->findOrFail($id);
+        return Post::with('user', 'comments.user')->findOrFail($id);
     }
 
     /**
@@ -93,6 +93,6 @@ class PostController extends Controller
 
     public function userPosts()
     {
-        return auth()->user()->posts()->with('comments')->get();
+        return auth()->user()->posts()->with('comments.user')->get();
     }
 }
