@@ -26,11 +26,11 @@ class CommentController extends Controller
         $post = Post::findOrFail($post_id);
         if ($post) {
             try {
-                $n = new Comment();
-                $n->user_id = Auth::user()->id;
-                $n->post_id = $post->id;
-                $n->content = $request->input('content');
-                $n->save();
+                $newComment = new Comment();
+                $newComment->user_id = Auth::user()->id;
+                $newComment->post_id = $post->id;
+                $newComment->content = $request->input('content');
+                $newComment->save();
                 return ["status" => "success", "message" => "comment created successfully!"];
             } catch(Throwable $e) {
                 return ["status" => "error", "message" => $e];
@@ -53,10 +53,10 @@ class CommentController extends Controller
             $this->validate($request, [
                 "content" => 'string|required'
             ]);
-            $n = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
+            $comment = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
             try {
-                $n->content = $request->input('content');
-                $n->save();
+                $comment->content = $request->input('content');
+                $comment->save();
                 return ["status" => "success", "message" => "comment updated successfully!"];
             } catch(Throwable $e) {
                 return ["status" => "error", "message" => $e];
@@ -76,8 +76,8 @@ class CommentController extends Controller
     {
         if (Auth::user()->subscription == 'premium') {
             try {
-                $n = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
-                $n->delete();
+                $comment = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
+                $comment->delete();
                 return ["status" => "success", "message" => "comment deleted successfully!"];
             } catch(Throwable $e) {
                 return ["status" => "error", "message" => $e];
