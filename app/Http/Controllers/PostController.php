@@ -90,4 +90,9 @@ class PostController extends Controller
             return ["status" => "error", "message" => $e];
         }
     }
+
+    public function userPosts()
+    {
+        return auth()->user()->posts()->with('comments')->get();
+    }
 }
