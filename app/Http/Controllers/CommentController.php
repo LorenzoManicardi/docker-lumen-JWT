@@ -4,10 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Throwable;
 
 class CommentController extends Controller
 {
@@ -41,10 +41,10 @@ class CommentController extends Controller
      */
     public function update(Request $request, string $post_id, string $id)
     {
-        if (Auth::user()->subscription == 'premium') {
-            $this->validate($request, [
-                "content" => 'string|required'
-            ]);
+        $this->validate($request, [
+            "content" => 'string|required'
+        ]);
+        if (Auth::user()->isPremium()) {
             /** @var Comment $comment */
             $comment = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
             $comment->content = $request->input('content');
@@ -60,20 +60,17 @@ class CommentController extends Controller
      * @param string $post_id
      * @param string $id
      * @return array|string[]
+     * @throws Exception
      */
     public function destroy(string $post_id, string $id): array
     {
         if (Auth::user()->subscription == 'premium') {
-            try {
-                /** @var Comment $comment */
-                $comment = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
-                $comment->delete();
-                return ["status" => "success", "message" => "comment deleted successfully!"];
-            } catch(Throwable $e) {
-                return ["status" => "error", "message" => $e];
-            }
+            /** @var Comment $comment */
+            $comment = Auth::user()->comments()->where('post_id', $post_id)->findOrFail($id);
+            $comment->delete();
+            return ["status" => "success", "message" => "comment deleted successfully!"];
         } else {
-            return ["status" => "error", "message" => "you must be a premium user for this feature!"];
+            throw new Exception("you must be a premium user!", 403);
         }
     }
 }

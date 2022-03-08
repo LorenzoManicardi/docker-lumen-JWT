@@ -76,17 +76,23 @@ $app->configure('app');
 //     App\Http\Middleware\ExampleMiddleware::class
 // ]);
 
+$app->middleware([
+    App\Http\Middleware\QueryMiddleware::class,
+    App\Http\Middleware\WrapperMiddleware::class,
+]);
+
+
 $app->routeMiddleware([
     'auth' => App\Http\Middleware\Authenticate::class,
 ]);
 
-$app->routeMiddleware([
+/*$app->routeMiddleware([
     'query' => App\Http\Middleware\QueryMiddleware::class,
 ]);
 
 $app->routeMiddleware([
     'wrapper' => App\Http\Middleware\WrapperMiddleware::class,
-]);
+]);*/
 
 /*
 |--------------------------------------------------------------------------

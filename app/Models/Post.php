@@ -13,6 +13,13 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Post extends Model
 {
+
+    protected $hidden = [
+        'user_id',
+        'created_at',
+        'updated_at',
+    ];
+
     /**
      * @return BelongsTo
      */

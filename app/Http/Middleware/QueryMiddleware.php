@@ -3,29 +3,26 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use DB;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\DB;
 
 class QueryMiddleware
 {
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @param \Illuminate\Http\Request $request
+     * @param \Closure $next
+     * @return Response
      */
-    public function handle($request, Closure $next)
+    public function handle(Request $request, Closure $next)
     {
-        //can activate middleware before passing the request
-        //echo "before passing the request!", "<br>";
-        //return $next($request);
-
-        // or maybe
         DB::connection()->enableQueryLog();
         $response =  $next($request);
         $myLog = DB::getQueryLog();
-        $obj = Array("queryLog" => $myLog, "response" => $response->original);
-        return $obj;
-
+        $obj = ["queryLog" => $myLog, "response" => $response->original];
+        $response->setContent($obj);
+        return $response;
     }
 }

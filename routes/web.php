@@ -20,7 +20,7 @@ $router->group(['prefix' => '/api/v1', 'middleware' => ['auth']], function( $rou
 });
 
 //POSTS
-$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper']], function( $router ) {
+$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth']], function( $router ) {
     $router->get( '/all', 'PostController@userPosts' );
     $router->post( '/', 'PostController@store' );
     $router->put( '/{id}', 'PostController@update' );
@@ -29,7 +29,7 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper']
 });
 
 //COMMENTS
-$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper']], function( $router ) {
+$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth']], function( $router ) {
     $router->post( '/{post_id}/comments', 'CommentController@store' );
     $router->put( '/{post_id}/comments/{id}', 'CommentController@update' );
     $router->delete( '{post_id}/comments/{id}', 'CommentController@destroy' );
@@ -52,7 +52,7 @@ $router->group(['prefix' => '/api/v1'], function( $router ) {
 );
 
 //POSTS
-    $router->group(['prefix' => '/api/v1/posts', 'middleware' => 'wrapper'], function( $router ) {
+    $router->group(['prefix' => '/api/v1/posts'], function( $router ) {
     $router->get( '/', 'PostController@index' );
     $router->get( '/{id}', 'PostController@show' );
 });

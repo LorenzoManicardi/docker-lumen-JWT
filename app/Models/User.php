@@ -58,6 +58,11 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      */
     protected $hidden = [
         'password',
+        'created_at',
+        'updated_at',
+        'email_verified_at',
+        'picture',
+        'subscription'
     ];
 
     /**
@@ -83,5 +88,10 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     public function hashPassword($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function isPremium()
+    {
+        return $this->subscription == 'premium';
     }
 }
