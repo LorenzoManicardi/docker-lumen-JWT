@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Comment;
 use App\Models\Post;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -36,7 +37,7 @@ class CommentController extends Controller
      * @param Request $request
      * @param string $post_id
      * @param string $id
-     * @return string[]|Comment
+     * @return Comment|JsonResponse|string[]
      * @throws ValidationException
      */
     public function update(Request $request, string $post_id, string $id)
@@ -51,12 +52,11 @@ class CommentController extends Controller
             $comment->save();
             return $comment;
         } else {
-            return ["status" => "error", "message" => "you must be a premium user for this feature!"];
+            return response()->json(["status" => "error", "message" => "you must be a premium user for this feature!"], 403);
         }
     }
 
     /**
-     * domanda per Steve: qua meglio che la funzione ritorni qualche altro tipo di dato o ha senso così?
      * @param string $post_id
      * @param string $id
      * @return array|string[]

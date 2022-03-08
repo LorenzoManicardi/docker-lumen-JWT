@@ -26,4 +26,11 @@ class Comment extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    protected $hidden = [
+        'user_id',
+        'post_id',
+        'created_at',
+        'updated_at'
+    ];
 }
