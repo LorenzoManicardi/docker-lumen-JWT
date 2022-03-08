@@ -36,7 +36,6 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-
     /**
      * @param $value
      * @return void
@@ -47,4 +46,9 @@ class Post extends Model
     }
 
     protected $fillable = ['title', 'content'];
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
+    }
 }
