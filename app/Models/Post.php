@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use phpDocumentor\Reflection\DocBlock\Tags\Reference\Fqsen;
 
 /**
  * @property string title
@@ -13,11 +14,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Post extends Model
 {
-
     protected $hidden = [
         'user_id',
         'created_at',
         'updated_at',
+    ];
+
+    protected $withCount = [
+        'likes'
     ];
 
     /**
@@ -51,4 +55,11 @@ class Post extends Model
     {
         return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
+
+    public function likesCount()
+    {
+        $this->loadCount('likes');
+    }
+
+
 }

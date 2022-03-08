@@ -75,7 +75,6 @@ class PostController extends Controller
 
 
     /**
-     * per Steve: qua meglio che la funzione ritorni qualche altro tipo di dato o ha senso così?
      * @param string $id
      * @return array|string[]
      */
