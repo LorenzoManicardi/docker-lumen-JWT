@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use phpDocumentor\Reflection\DocBlock\Tags\Reference\Fqsen;
 
 /**
  * @property string title
