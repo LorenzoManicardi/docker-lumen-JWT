@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 
 class WrapperMiddleware
 {
@@ -25,8 +26,12 @@ class WrapperMiddleware
             $response->setContent(["data" => $data]);
         } else {
             $e = $response->statusText();
-            $message = $response->exception->getMessage();
-            $response->setContent(["code" => $code, "exception" => $e, "message" => $message]);
+            if (App::environment('local')) {
+                $message = $response->exception->getMessage();
+                $response->setContent(["code" => $code, "exception" => $e, "message" => $message]);
+            } else {
+                $response->setContent(["code" => $code, "exception" => $e]);
+            }
         }
         return $response;
     }

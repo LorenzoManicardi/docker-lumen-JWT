@@ -17,10 +17,17 @@ class Post extends Model
         'user_id',
         'created_at',
         'updated_at',
+        'pivot',
     ];
 
     protected $withCount = [
         'likes'
+    ];
+
+    protected $with = [
+        'user',
+        'likes:id,name',
+        'comments.user:id,name'
     ];
 
     protected $fillable = [

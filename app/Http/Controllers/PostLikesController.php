@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Exception;
+use Illuminate\Http\JsonResponse;
 
 class PostLikesController extends Controller
 {
 
     /**
      * @param string $post_id
-     * @return Exception|string[]
+     * @return Exception|JsonResponse|string[]
      */
     public function likePost(string $post_id)
     {
@@ -19,7 +20,7 @@ class PostLikesController extends Controller
             auth()->user()->likedPosts()->attach($post->id);
             return ['status' => 'success', 'message' => 'post liked successfully!'];
         } catch (Exception $e) {
-            return $e;
+            return ['status' => 'something went wrong...', 'message' => 'you already liked this post!'];
         }
     }
 
@@ -35,10 +36,8 @@ class PostLikesController extends Controller
             auth()->user()->likedPosts()->detach($post->id);
             return ['status' => 'success', 'message' => 'post unliked successfully!'];
         } catch (Exception $e) {
-            return $e;
+            return ['status' => 'something went wrong', 'message' => 'you did not like this post!'];
         }
     }
-
-
 
 }

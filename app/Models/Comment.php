@@ -36,10 +36,15 @@ class Comment extends Model
         'user_id',
         'post_id',
         'created_at',
-        'updated_at'
+        'updated_at',
+        'pivot',
     ];
 
     protected $withCount = [
         'likes'
+    ];
+
+    protected $with = [
+        'likes:id,name',
     ];
 }

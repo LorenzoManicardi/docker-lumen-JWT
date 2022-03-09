@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Post;
+use App\Models\Comment;
 use Exception;
 
 class CommentLikesController extends Controller
@@ -13,12 +13,12 @@ class CommentLikesController extends Controller
      */
     public function likeComment(string $comment_id)
     {
-        $comment = Post::findOrFail($comment_id);
+        $comment = Comment::findOrFail($comment_id);
         try {
             auth()->user()->likedComments()->attach($comment->id);
             return ['status' => 'success', 'message' => 'comment liked successfully!'];
         } catch (Exception $e) {
-            return $e;
+            return ['status' => 'something went wrong...', 'message' => 'you already liked this comment!'];
         }
     }
 
@@ -29,12 +29,12 @@ class CommentLikesController extends Controller
      */
     public function unLikeComment(string $comment_id)
     {
-        $comment = Post::findOrFail($comment_id);
+        $comment = Comment::findOrFail($comment_id);
         try {
             auth()->user()->likedComments()->detach($comment->id);
-            return ['status' => 'success', 'message' => 'post unliked successfully!'];
+            return ['status' => 'success', 'message' => 'comment unliked successfully!'];
         } catch (Exception $e) {
-            return $e;
+            return ['status' => 'something went wrong...', 'message' => 'you did not like this comment!'];
         }
     }
 }
