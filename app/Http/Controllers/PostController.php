@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return Post::with(['user', 'comments.user:id,name'])
+        return Post::with(['user', 'comments.user:id,name', 'likes:id,name'])
             ->orderBy('id', 'desc')->get();
     }
 
@@ -29,7 +29,7 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        return Post::with('user', 'comments.user:id,name')->findOrFail($id);
+        return Post::with('user', 'comments.user:id,name', 'likes:id,name')->findOrFail($id);
     }
 
     /**
@@ -91,9 +91,12 @@ class PostController extends Controller
         }
     }
 
+    /**
+     * @return mixed
+     */
     public function userPosts()
     {
-        return auth()->user()->posts()->with('comments.user:id,name')
+        return auth()->user()->posts()->with('comments.user:id,name', 'likes:id,name')
             ->orderBy('id', 'desc')->get();
     }
 }

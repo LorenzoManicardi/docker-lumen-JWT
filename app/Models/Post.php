@@ -23,6 +23,11 @@ class Post extends Model
         'likes'
     ];
 
+    protected $fillable = [
+        'title',
+        'content'
+    ];
+
     /**
      * @return BelongsTo
      */
@@ -48,17 +53,10 @@ class Post extends Model
         $this->attributes['user_id'] = $value;
     }
 
-    protected $fillable = ['title', 'content'];
 
     public function likes()
     {
         return $this->belongsToMany(User::class, 'likes')->withTimestamps();
     }
-
-    public function likesCount()
-    {
-        $this->loadCount('likes');
-    }
-
 
 }
