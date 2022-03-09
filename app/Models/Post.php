@@ -13,11 +13,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class Post extends Model
 {
-
     protected $hidden = [
         'user_id',
         'created_at',
         'updated_at',
+    ];
+
+    protected $withCount = [
+        'likes'
+    ];
+
+    protected $fillable = [
+        'title',
+        'content'
     ];
 
     /**
@@ -36,7 +44,6 @@ class Post extends Model
         return $this->hasMany(Comment::class);
     }
 
-
     /**
      * @param $value
      * @return void
@@ -46,5 +53,10 @@ class Post extends Model
         $this->attributes['user_id'] = $value;
     }
 
-    protected $fillable = ['title', 'content'];
+
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'likes')->withTimestamps();
+    }
+
 }

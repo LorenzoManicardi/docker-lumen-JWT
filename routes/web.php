@@ -35,6 +35,14 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
     $router->delete( '{post_id}/comments/{id}', 'CommentController@destroy' );
 });
 
+//LIKES
+$router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper', 'query']], function( $router ) {
+    $router->post( '/{post_id}/like', 'PostLikesController@likePost' );
+    $router->delete( '{post_id}/like', 'PostLikesController@unLikePost' );
+    $router->post( '/comments/{comment_id}/like', 'CommentLikesController@likeComment' );
+    $router->delete( '/comments/{comment_id}/like', 'CommentLikesController@unLikeComment' );
+});
+
 
 
 

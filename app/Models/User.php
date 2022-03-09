@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Hash;
 use Laravel\Lumen\Auth\Authorizable;
@@ -90,8 +91,27 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
         $this->attributes['password'] = Hash::make($value);
     }
 
+    /**
+     * @return bool
+     */
     public function isPremium()
     {
         return $this->subscription == 'premium';
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function likedPosts()
+    {
+        return $this->belongsToMany(Post::class, 'likes')->withTimestamps();
+    }
+
+    /**
+     * @return BelongsToMany
+     */
+    public function likedComments()
+    {
+        return $this->belongsToMany(Comment::class, 'comment_likes')->withTimestamps();
     }
 }
