@@ -27,10 +27,19 @@ class Comment extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function likes()
+    {
+        return $this->belongsToMany(User::class, 'comment_likes')->withTimestamps();
+    }
+
     protected $hidden = [
         'user_id',
         'post_id',
         'created_at',
         'updated_at'
+    ];
+
+    protected $withCount = [
+        'likes'
     ];
 }
