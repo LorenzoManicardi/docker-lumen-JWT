@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 class QueryMiddleware
@@ -20,9 +21,11 @@ class QueryMiddleware
     {
         DB::connection()->enableQueryLog();
         $response =  $next($request);
-        $myLog = DB::getQueryLog();
-        $obj = ["queryLog" => $myLog, "response" => $response->original];
-        $response->setContent($obj);
+        if (App::environment('local')) {
+            $myLog = DB::getQueryLog();
+            $obj = ["queryLog" => $myLog, "response" => $response->original];
+            $response->setContent($obj);
+        }
         return $response;
     }
 }
