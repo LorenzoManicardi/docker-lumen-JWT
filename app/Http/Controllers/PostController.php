@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Category;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -39,15 +40,17 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'category' => 'required|integer'
+            'category' => 'required|string'
         ]);
         $newPost = new Post([
             "title" => $request->input('title'),
             "content" => $request->input('content')
         ]);
+        $category = $request->input('category');
+        $currCategory = Category::where('category_name', $category)->firstOrFail();
         $newPost->setUserId(Auth::user()->id);
         $newPost->save();
-        $newPost->categories()->attach($request->input('category'));
+        $newPost->categories()->attach($currCategory->id);
         return $newPost;
     }
 
@@ -101,6 +104,6 @@ class PostController extends Controller
 
     public function favoritePosts()
     {
-        return auth()->user()->favorites()->orderBy('id', 'desc')->get();
+        return auth()->user()->favorites()->get();
     }
 }
