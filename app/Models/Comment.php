@@ -46,5 +46,6 @@ class Comment extends Model
 
     protected $with = [
         'likes:id,name',
+        'user'
     ];
 }

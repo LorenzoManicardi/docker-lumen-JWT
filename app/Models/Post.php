@@ -4,12 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
  * @property string title
  * @property string content
  * @method static findOrFail(string $post_id)
+ * @method static OrderBy
  */
 class Post extends Model
 {
@@ -18,6 +20,7 @@ class Post extends Model
         'created_at',
         'updated_at',
         'pivot',
+        'category_id'
     ];
 
     protected $withCount = [
@@ -26,14 +29,15 @@ class Post extends Model
 
     protected $with = [
         'user',
-        'likes:id,name',
-        'comments.user:id,name'
+        'comments',
+        'likes'
     ];
 
     protected $fillable = [
         'title',
         'content'
     ];
+
 
     /**
      * @return BelongsTo
@@ -55,20 +59,26 @@ class Post extends Model
      * @param $value
      * @return void
      */
-    public function setUserId($value)
+    public function setUserId($value): void
     {
         $this->attributes['user_id'] = $value;
     }
 
 
-    public function likes()
+    /**
+     * @return BelongsToMany
+     */
+    public function likes(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'likes')->withTimestamps()->as('like info:');
     }
 
-    public function categories()
+    /**
+     * @return BelongsToMany
+     */
+    public function categories(): BelongsToMany
     {
-        return $this->belongsToMany(Category::class);
+        return $this->belongsToMany(Category::class)->withTimestamps();
     }
 
 }
