@@ -23,7 +23,7 @@ class QueryMiddleware
         $response =  $next($request);
         if (App::environment('local')) {
             $myLog = DB::getQueryLog();
-            $obj = ["queryLog" => $myLog, "response" => $response->original];
+            $obj = ["response" => $response->original, "queryLog" => $myLog];
             $response->setContent($obj);
         }
         return $response;

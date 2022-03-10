@@ -3,38 +3,41 @@
 namespace App\Http\Controllers;
 
 use App\Models\Comment;
-use Exception;
 
 class CommentLikesController extends Controller
 {
+
+
     /**
      * @param string $comment_id
-     * @return Exception|string[]
+     * @return Comment|void
      */
     public function likeComment(string $comment_id)
     {
+
+        /** @var Comment $comment */
         $comment = Comment::findOrFail($comment_id);
-        try {
+        if (auth()->user()->likedComments()->where('comment_id', $comment_id)->exists()) {
+            abort(405);
+        } else {
             auth()->user()->likedComments()->attach($comment->id);
-            return ['status' => 'success', 'message' => 'comment liked successfully!'];
-        } catch (Exception $e) {
-            return ['status' => 'something went wrong...', 'message' => 'you already liked this comment!'];
+            return $comment;
         }
     }
 
-
     /**
      * @param string $comment_id
-     * @return Exception|string[]
+     * @return Comment|void
      */
     public function unLikeComment(string $comment_id)
     {
+        /** @var Comment $comment */
         $comment = Comment::findOrFail($comment_id);
-        try {
+        if (auth()->user()->likedComments()->where('comment_id', $comment_id)->exists()) {
             auth()->user()->likedComments()->detach($comment->id);
-            return ['status' => 'success', 'message' => 'comment unliked successfully!'];
-        } catch (Exception $e) {
-            return ['status' => 'something went wrong...', 'message' => 'you did not like this comment!'];
+            return $comment;
+        } else {
+            abort(405);
         }
     }
 }
