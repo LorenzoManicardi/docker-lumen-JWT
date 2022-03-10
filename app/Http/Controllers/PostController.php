@@ -100,6 +100,6 @@ class PostController extends Controller
 
     public function favoritePosts()
     {
-        return auth()->user()->favorites()->get();
+        return auth()->user()->favorites()->orderBy('id', 'desc')->get();
     }
 }
