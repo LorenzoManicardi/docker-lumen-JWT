@@ -3,9 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
@@ -14,7 +11,7 @@ use Throwable;
 class PostController extends Controller
 {
     /**
-     * @return Builder[]|Collection
+     * @return mixed
      */
     public function index()
     {
@@ -24,7 +21,7 @@ class PostController extends Controller
     /**
      * takes input a string "id" -> returns posts with eager loading of his user and comments
      * @param string $id
-     * @return Builder|Builder[]|Collection|Model|null
+     * @return mixed
      */
     public function show(string $id)
     {
@@ -42,6 +39,7 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
+            'category' => 'required|integer'
         ]);
         $newPost = new Post([
             "title" => $request->input('title'),
@@ -49,6 +47,7 @@ class PostController extends Controller
         ]);
         $newPost->setUserId(Auth::user()->id);
         $newPost->save();
+        $newPost->categories()->attach($request->input('category'));
         return $newPost;
     }
 
@@ -64,10 +63,12 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
+            'category' => 'integer'
         ]);
         $post = auth()->user()->posts()->findOrFail($id);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
+        $post->categories()->sync($request->input('category'));
         $post->save();
         return $post;
     }

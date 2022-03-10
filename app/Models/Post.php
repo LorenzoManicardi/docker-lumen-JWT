@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
@@ -26,8 +27,8 @@ class Post extends Model
 
     protected $with = [
         'user',
-        'likes:id,name',
-        'comments.user:id,name'
+        'comments',
+        'likes'
     ];
 
     protected $fillable = [
@@ -61,11 +62,17 @@ class Post extends Model
     }
 
 
+    /**
+     * @return BelongsToMany
+     */
     public function likes()
     {
         return $this->belongsToMany(User::class, 'likes')->withTimestamps()->as('like info:');
     }
 
+    /**
+     * @return BelongsToMany
+     */
     public function categories()
     {
         return $this->belongsToMany(Category::class);
