@@ -97,4 +97,9 @@ class PostController extends Controller
     {
         return auth()->user()->posts()->orderBy('id', 'desc')->get();
     }
+
+    public function favoritePosts()
+    {
+        return auth()->user()->favorites()->get();
+    }
 }

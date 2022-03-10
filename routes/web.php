@@ -22,6 +22,7 @@ $router->group(['prefix' => '/api/v1', 'middleware' => ['auth']], function( $rou
 //POSTS
 $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper', 'query']], function( $router ) {
     $router->get( '/list', 'PostController@userPosts' );
+    $router->get( '/favorites', 'PostController@favoritePosts' );
     $router->post( '/', 'PostController@store' );
     $router->put( '/{id}', 'PostController@update' );
     $router->delete( '/{id}', 'PostController@destroy' );
@@ -42,9 +43,6 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
     $router->post( '/comments/{comment_id}/like', 'CommentLikesController@likeComment' );
     $router->delete( '/comments/{comment_id}/like', 'CommentLikesController@unLikeComment' );
 });
-
-
-
 
 /*
  *
