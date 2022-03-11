@@ -4,13 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Post;
+use App\Traits\UserTrait;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Throwable;
 
 class PostController extends Controller
 {
+    use UserTrait;
+
+
     /**
      * @return mixed
      */
@@ -48,7 +51,7 @@ class PostController extends Controller
         ]);
         $category = $request->input('category');
         $currCategory = Category::where('category_name', $category)->firstOrFail();
-        $newPost->setUserId(Auth::user()->id);
+        $newPost->setUserId($this->getUserId());
         $newPost->save();
         $newPost->categories()->attach($currCategory->id);
         return $newPost;

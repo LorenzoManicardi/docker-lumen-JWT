@@ -38,9 +38,9 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      *
      * @return array
      */
-    public function getJWTCustomClaims()
+    public function getJWTCustomClaims(): array
     {
-    return [];
+        return [];
     }
 
     /**
@@ -69,7 +69,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return HasMany
      */
-    public function posts()
+    public function posts(): HasMany
     {
         return $this->hasMany(Post::class);
     }
@@ -77,7 +77,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return HasMany
      */
-    public function comments()
+    public function comments(): HasMany
     {
         return $this->hasMany(Comment::class);
     }
@@ -86,7 +86,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
      * @param $value
      * @return void
      */
-    public function hashPassword($value)
+    public function hashPassword($value): void
     {
         $this->attributes['password'] = Hash::make($value);
     }
@@ -94,7 +94,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return bool
      */
-    public function isPremium()
+    public function isPremium(): bool
     {
         return $this->subscription == 'premium';
     }
@@ -102,7 +102,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return BelongsToMany
      */
-    public function likedPosts()
+    public function likedPosts(): BelongsToMany
     {
         return $this->belongsToMany(Post::class, 'likes')->withTimestamps();
     }
@@ -110,7 +110,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return BelongsToMany
      */
-    public function likedComments()
+    public function likedComments(): BelongsToMany
     {
         return $this->belongsToMany(Comment::class, 'comment_likes')->withTimestamps();
     }
@@ -119,7 +119,7 @@ class User extends Model implements AuthenticatableContract, AuthorizableContrac
     /**
      * @return BelongsToMany
      */
-    public function favorites()
+    public function favorites(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_user')->withTimestamps();
     }

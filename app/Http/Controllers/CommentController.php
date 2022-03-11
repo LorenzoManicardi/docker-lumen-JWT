@@ -4,14 +4,16 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
-use Exception;
-use Illuminate\Http\JsonResponse;
+use App\Traits\UserTrait;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 
 class CommentController extends Controller
 {
+
+    use UserTrait;
+
     /**
      * @param Request $request
      * @param string $post_id
@@ -26,7 +28,7 @@ class CommentController extends Controller
         /** @var Post $post */
         $post = Post::findOrFail($post_id);
         $newComment = new Comment();
-        $newComment->user_id = Auth::user()->id;
+        $newComment->user_id = $this->getUserId();
         $newComment->post_id = $post->id;
         $newComment->content = $request->input('content');
         $newComment->save();
@@ -40,7 +42,7 @@ class CommentController extends Controller
      * @return Comment
      * @throws ValidationException
      */
-    public function update(Request $request, string $post_id, string $id)
+    public function update(Request $request, string $post_id, string $id): Comment
     {
         $this->validate($request, [
             "content" => 'string|required'
