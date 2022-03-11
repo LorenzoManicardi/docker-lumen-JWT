@@ -11,8 +11,8 @@ use Throwable;
 
 class PostController extends Controller
 {
-    use UserTrait;
 
+    use UserTrait;
 
     /**
      * @return mixed
@@ -51,8 +51,7 @@ class PostController extends Controller
         ]);
         $category = $request->input('category');
         $currCategory = Category::where('category_name', $category)->firstOrFail();
-        $newPost->setUserId($this->getUserId());
-        $newPost->save();
+        $this->saveWithUserId($newPost);
         $newPost->categories()->attach($currCategory->id);
         return $newPost;
     }
