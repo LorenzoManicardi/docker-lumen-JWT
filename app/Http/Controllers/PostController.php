@@ -108,4 +108,10 @@ class PostController extends Controller
     {
         return auth()->user()->favorites()->get();
     }
+
+    public function categoryShow(string $category)
+    {
+        $currCategory = Category::where('category_name', $category)->firstOrFail();
+        return $currCategory->posts()->get();
+    }
 }

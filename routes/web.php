@@ -24,6 +24,7 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
     $router->get( '/list', 'PostController@userPosts' );
     $router->get( '/favorites', 'PostController@favoritePosts' );
     $router->post( '/', 'PostController@store' );
+    $router->get( '/category/{category}', 'PostController@categoryShow' );
     $router->put( '/{id}', 'PostController@update' );
     $router->delete( '/{id}', 'PostController@destroy' );
 
