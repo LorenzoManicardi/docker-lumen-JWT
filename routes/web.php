@@ -45,6 +45,11 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
     $router->delete( '/comments/{comment_id}/like', 'CommentLikesController@unLikeComment' );
 });
 
+//CATEGORIES
+$router->group(['prefix' => '/api/v1/categories', 'middleware' => ['auth', 'wrapper', 'query']], function( $router ) {
+    $router->get( '/', 'CategoryController@index' );
+});
+
 /*
  *
  * UNAUTHENTICATED ROUTES
