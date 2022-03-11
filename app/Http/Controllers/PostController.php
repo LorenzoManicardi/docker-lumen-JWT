@@ -66,13 +66,15 @@ class PostController extends Controller
         $this->validate($request, [
             'title' => 'required',
             'content' => 'required',
-            'category' => 'integer'
+            'category' => 'string'
         ]);
         $post = auth()->user()->posts()->findOrFail($id);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
-        $post->categories()->sync($request->input('category'));
+        $category = $request->input('category');
+        $currCategory = Category::where('category_name', $category)->firstOrFail();
         $post->save();
+        $post->categories()->sync($currCategory);
         return $post;
     }
 
