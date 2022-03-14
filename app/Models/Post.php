@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\UserTrait;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
@@ -82,6 +83,15 @@ class Post extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class)->withTimestamps();
+    }
+
+    /**
+     * @param Builder $query
+     * @return Builder
+     */
+    public function scopeWhereUserId(Builder $query): Builder
+    {
+        return $query->where('user_id', auth()->user()->id);
     }
 
 }

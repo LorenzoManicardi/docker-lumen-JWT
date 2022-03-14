@@ -70,7 +70,7 @@ class PostController extends Controller
             'content' => 'required',
             'category' => 'string'
         ]);
-        $post = auth()->user()->posts()->findOrFail($id);
+        $post = Post::WhereUserId()->findOrFail($id);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
         $post->save();
@@ -90,10 +90,10 @@ class PostController extends Controller
     public function destroy(string $id): array
     {
         /** @var Post $p */
-        $p = auth()->user()->posts()->findOrFail($id);
-        $p->comments()->delete();
+        $post = Post::WhereUserId()->findOrFail($id);
+        $post->comments()->delete();
         try {
-            $p->delete();
+            $post->delete();
             return ["status" => "success", "message" => "deleted successfully!"];
         } catch (Throwable $e) {
             return ["status" => "error", "message" => $e];
@@ -105,7 +105,7 @@ class PostController extends Controller
      */
     public function userPosts()
     {
-        return auth()->user()->posts()->orderBy('id', 'desc')->get();
+        return Post::WhereUserId()->orderBy('id', 'desc')->get();
     }
 
     public function favoritePosts()

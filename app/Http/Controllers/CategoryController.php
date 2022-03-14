@@ -24,7 +24,6 @@ class CategoryController extends Controller
     public function show($cat_name): Category
     {
         /** @var Category $category */
-        $category =  Category::where('category_name', $cat_name)->firstOrFail();
-        return $category;
+        return Category::where('category_name', $cat_name)->firstOrFail();
     }
 }
