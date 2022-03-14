@@ -28,10 +28,9 @@ class CommentController extends Controller
         /** @var Post $post */
         $post = Post::findOrFail($post_id);
         $newComment = new Comment();
-        $newComment->user_id = $this->getUserId();
         $newComment->post_id = $post->id;
         $newComment->content = $request->input('content');
-        $newComment->save();
+        $newComment->saveWithUserId();
         return $newComment;
     }
 

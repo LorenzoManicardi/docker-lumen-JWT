@@ -45,13 +45,14 @@ class PostController extends Controller
             'content' => 'required',
             'category' => 'required|string'
         ]);
+        /** @var Post $newPost */
         $newPost = new Post([
             "title" => $request->input('title'),
             "content" => $request->input('content')
         ]);
         $category = $request->input('category');
         $currCategory = Category::where('category_name', $category)->firstOrFail();
-        $this->saveWithUserId($newPost);
+        $newPost->saveWithUserId();
         $newPost->categories()->attach($currCategory->id);
         return $newPost;
     }
