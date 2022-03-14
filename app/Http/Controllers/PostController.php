@@ -45,7 +45,6 @@ class PostController extends Controller
             'content' => 'required',
             'category' => 'required|string'
         ]);
-        /** @var Post $newPost */
         $newPost = new Post([
             "title" => $request->input('title'),
             "content" => $request->input('content')
@@ -74,10 +73,12 @@ class PostController extends Controller
         $post = auth()->user()->posts()->findOrFail($id);
         $post->title = $request->input('title');
         $post->content = $request->input('content');
-        $category = $request->input('category');
-        $currCategory = Category::where('category_name', $category)->firstOrFail();
         $post->save();
-        $post->categories()->sync($currCategory);
+        if ($request->input('category')) {
+            $category = $request->input('category');
+            $currCategory = Category::where('category_name', $category)->firstOrFail();
+            $post->categories()->sync($currCategory);
+        }
         return $post;
     }
 
@@ -112,9 +113,4 @@ class PostController extends Controller
         return auth()->user()->favorites()->get();
     }
 
-    public function categoryShow(string $category)
-    {
-        $currCategory = Category::where('category_name', $category)->firstOrFail();
-        return $currCategory->posts()->get();
-    }
 }

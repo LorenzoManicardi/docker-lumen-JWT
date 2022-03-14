@@ -19,4 +19,9 @@ class Category extends Model
     protected $with = [
         'posts'
     ];
+
+    protected $hidden = [
+        'created_at',
+        'updated_at',
+    ];
 }

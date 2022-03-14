@@ -3,18 +3,28 @@
 namespace App\Http\Controllers;
 
 
-use App\Models\Post;
+use App\Models\Category;
+use Illuminate\Database\Eloquent\Collection;
 
 class CategoryController extends Controller
 {
+    /**
+     * @return Category[]|Collection
+     */
     public function index()
     {
-        /** @var Post $post */
-        $post = new Post([
-            'title' => 'primo titolo',
-            'content' => 'testo primo post'
-        ]);
-        $post->saveWithUserId();
-        return $post;
+        return Category::all();
+    }
+
+
+    /**
+     * @param $cat_name
+     * @return Category
+     */
+    public function show($cat_name): Category
+    {
+        /** @var Category $category */
+        $category =  Category::where('category_name', $cat_name)->firstOrFail();
+        return $category;
     }
 }

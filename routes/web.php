@@ -1,6 +1,8 @@
 <?php
 
-/** @var \Laravel\Lumen\Routing\Router $router */
+/** @var Router $router */
+
+use Laravel\Lumen\Routing\Router;
 
 $router->get('/', function () use ($router) {
     return $router->app->version() . "<br>" . "Created by LM ®";
@@ -24,7 +26,6 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
     $router->get( '/list', 'PostController@userPosts' );
     $router->get( '/favorites', 'PostController@favoritePosts' );
     $router->post( '/', 'PostController@store' );
-    $router->get( '/category/{category}', 'PostController@categoryShow' );
     $router->put( '/{id}', 'PostController@update' );
     $router->delete( '/{id}', 'PostController@destroy' );
 
@@ -48,6 +49,7 @@ $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['auth', 'wrapper',
 //CATEGORIES
 $router->group(['prefix' => '/api/v1/categories', 'middleware' => ['auth', 'wrapper', 'query']], function( $router ) {
     $router->get( '/', 'CategoryController@index' );
+    $router->get( '/{cat_name}', 'CategoryController@show' );
 });
 
 /*
