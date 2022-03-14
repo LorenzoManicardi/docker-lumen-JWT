@@ -69,5 +69,6 @@ $router->group(['prefix' => '/api/v1'], function( $router ) {
     $router->group(['prefix' => '/api/v1/posts', 'middleware' => ['wrapper', 'query']], function( $router ) {
     $router->get( '/', 'PostController@index' );
     $router->get( '/{id}', 'PostController@show' );
+    $router->get( '/search/{toSearch}', 'PostController@search' );
 });
 

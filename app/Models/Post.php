@@ -13,7 +13,9 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string title
  * @property string content
  * @method static findOrFail(string $post_id)
- * @method static OrderBy
+ * @method static WhereUserId()
+ * @method static SearchTitle()
+ * @method static orderBy($p1, $p2)
  */
 class Post extends Model
 {
@@ -92,6 +94,16 @@ class Post extends Model
     public function scopeWhereUserId(Builder $query): Builder
     {
         return $query->where('user_id', auth()->user()->id);
+    }
+
+    /**
+     * @param Builder $query
+     * @param string $toSearch
+     * @return Builder
+     */
+    public function scopeSearchTitle(Builder $query, string $toSearch): Builder
+    {
+        return $query->where('title', 'like', '%' . $toSearch . '%');
     }
 
 }

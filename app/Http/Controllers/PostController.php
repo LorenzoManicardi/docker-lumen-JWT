@@ -108,9 +108,21 @@ class PostController extends Controller
         return Post::WhereUserId()->orderBy('id', 'desc')->get();
     }
 
+    /**
+     * @return mixed
+     */
     public function favoritePosts()
     {
         return auth()->user()->favorites()->get();
+    }
+
+    /**
+     * @param string $toSearch
+     * @return mixed
+     */
+    public function search(string $toSearch)
+    {
+        return Post::SearchTitle($toSearch)->get();
     }
 
 }
